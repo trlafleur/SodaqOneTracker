@@ -23,7 +23,8 @@
 #include "Utils.h"
 #include "Sodaq_wdt.h"
 
-//#define DEBUG
+#define DEBUG
+#define SCG     // <-------------- TRL
 
 #ifdef DEBUG
 #define debugPrintLn(...) { if (this->diagStream) this->diagStream->println(__VA_ARGS__); }
@@ -342,7 +343,35 @@ bool Sodaq_RN2483::setFsbChannels(uint8_t fsb)
     uint8_t last125kHzChannel = fsb > 0 ? first125kHzChannel + 7 : 71;
     uint8_t fsb500kHzChannel = fsb + 63;
 
-    bool allOk = true;
+#ifdef SCG                            // <-------------- TRL and below code
+
+    debugPrintLn("[Setting SCG to Ch = 0]");
+    
+    // Turn off all but channel 0
+    
+        bool allOk = true;
+    for (uint8_t i = 1; i < 72; i++) {
+        this->loraStream->print(STR_CMD_SET_CHANNEL_STATUS);
+        this->loraStream->print(i);
+        this->loraStream->print(" ");
+        this->loraStream->print("off");
+        this->loraStream->print(CRLF);
+  
+        allOk &= expectOK();
+    }
+
+        // Enable ch 0 only
+        this->loraStream->print(STR_CMD_SET_CHANNEL_STATUS);
+        this->loraStream->print(0);
+        this->loraStream->print(" ");
+        this->loraStream->print("on");
+        this->loraStream->print(CRLF);
+        
+        allOk &= expectOK();
+
+#else
+
+        bool allOk = true;
     for (uint8_t i = 0; i < 72; i++) {
         this->loraStream->print(STR_CMD_SET_CHANNEL_STATUS);
         this->loraStream->print(i);
@@ -352,6 +381,8 @@ bool Sodaq_RN2483::setFsbChannels(uint8_t fsb)
 
         allOk &= expectOK();
     }
+    
+#endif
 
     return allOk;
 }
