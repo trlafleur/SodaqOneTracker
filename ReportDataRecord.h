@@ -91,10 +91,10 @@ public:
     void setBoardTemperature(int8_t value) const { setFieldValue(BoardTemperature, value); }
 
     uint32_t getLat() const { return getFieldValue<uint32_t>(Lat); }
-    void setLat(uint32_t value) const { setFieldValue(Lat, value); }
+    void setLat(uint32_t value) const { setFieldValue(Lat, value); }				// <------------ TRL  void setLong(uint32_t value) const { setFieldValue(Long, value); }
 
     uint32_t getLong() const { return getFieldValue<uint32_t>(Long); }
-    void setLong(uint32_t value) const { setFieldValue(Long, value); }
+    void setLong(uint32_t value) const { setFieldValue(Long, value); }				// <------------ TRL  void setLong(uint32_t value) const { setFieldValue(Long, value); }
 
     uint16_t getAltitude() const { return getFieldValue<uint16_t>(Altitude); }
     void setAltitude(uint16_t value) const { setFieldValue(Altitude, value); }

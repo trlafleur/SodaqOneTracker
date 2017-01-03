@@ -71,7 +71,7 @@ void ConfigParams::read()
 
 void ConfigParams::reset()
 {
-    _defaultFixInterval = 15;
+    _defaultFixInterval = 1;        // <----------- trl
     _alternativeFixInterval = 0;
     _alternativeFixFromHours = 0;
     _alternativeFixFromMinutes = 0;
@@ -89,15 +89,15 @@ void ConfigParams::reset()
     _nwSKeyOrAppKey[sizeof(_nwSKeyOrAppKey) - 1] = '\0';
 
     _coordinateUploadCount = 1;
-    _repeatCount = 0;
+    _repeatCount = 5;      // <----------- trl
 
-    _isAdrOn = 1;
+    _isAdrOn = 0;       // <----------- trl
     _isAckOn = 0;
     _spreadingFactor = 7;
-    _powerIndex = 1;
+    _powerIndex = 18;      // <----------- trl
     _isGpsOn = 1;
     _gpsMinSatelliteCount = 4;
-    _isDebugOn = 0;
+    _isDebugOn = 1;       // <----------- trl
 
     if (configResetCallback) {
         configResetCallback();

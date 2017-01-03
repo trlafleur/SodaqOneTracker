@@ -57,7 +57,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 //const char *devAddr = "26021E69";
 //const char *nwkSKey = "CB935C8DA69E93AE0BA64293A4CD02E9";
-//const char *appSKey = "5E935EB19334D0D6B38032E96C299D2A";
+//const char *appSKey = "5E935EB19334D0D6B38032E96C299D2A";dbg
 
 //const char *appEui = "70B3D57EF0001DE6";
 //const char *appKey = "5E935EB19334D0D6B38032E96C299D2A";
@@ -65,16 +65,18 @@ POSSIBILITY OF SUCH DAMAGE.
 //const char *appEui = "70B3D57EF0001E40";
 //const char *appKey = "CB935C8DA69E93AE0BA64293A4CD02E9";
 
-#define DEFAULT_IS_OTAA_ENABLED 1
+//#define DEFAULT_IS_OTAA_ENABLED
 
-#if defined (DEFAULT_IS_OTAA_ENABLED) == 0
-  #define DEFAULT_DEVADDR_OR_DEVEUI "26021E69"
-  #define DEFAULT_APPSKEY_OR_APPEUI "5E935EB19334D0D6B38032E96C299D2A"
-  #define DEFAULT_NWSKEY_OR_APPKEY  "CB935C8DA69E93AE0BA64293A4CD02E9"
-#else
+#if defined DEFAULT_IS_OTAA_ENABLED
   #define DEFAULT_DEVADDR_OR_DEVEUI "0004A30B001AB7FF"
   #define DEFAULT_APPSKEY_OR_APPEUI "70B3D57EF0001E40"
   #define DEFAULT_NWSKEY_OR_APPKEY  "CB935C8DA69E93AE0BA64293A4CD02E9"
+  #warning OTAA
+#else
+  #define DEFAULT_DEVADDR_OR_DEVEUI "26021E69"
+  #define DEFAULT_APPSKEY_OR_APPEUI "5E935EB19334D0D6B38032E96C299D2A"
+  #define DEFAULT_NWSKEY_OR_APPKEY  "CB935C8DA69E93AE0BA64293A4CD02E9"
+  #warning APB
 #endif
 
 #define GPS_TIME_VALIDITY 0b00000011 // date and time (but not fully resolved)
@@ -202,6 +204,7 @@ void setup()
     sodaq_wdt_reset();
 
     SerialUSB.begin(115200);
+    
     // override debug configuration
 #ifdef DEBUG
     params._isDebugOn = true;
@@ -1126,7 +1129,7 @@ void getHWEUI()
 {
     // only read the HWEUI once
     if (!isLoraHWEuiInitialized) {
-        initLora(true);
+        initLora(true);                   // <------------ trl was true
         sodaq_wdt_safe_delay(10);
         setLoraActive(true);
         uint8_t len = LoRaBee.getHWEUI(loraHWEui, sizeof(loraHWEui));
